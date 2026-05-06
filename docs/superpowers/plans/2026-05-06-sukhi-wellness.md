@@ -53,4 +53,4 @@
 - [x] Install dependencies.
 - [x] Run build verification.
 - [x] Smoke-test app routes locally.
-- [ ] Push the project to `aranluxman/SukhiPathansaly`.
+- [x] Push the project to `aranluxman/SukhiPathansaly`.
