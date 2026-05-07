@@ -1,17 +1,16 @@
 export const STORAGE_KEYS = {
   workouts: 'sukhi_workouts',
   meals: 'sukhi_meals',
+  recipes: 'sukhi_recipes',
   goals: 'sukhi_goals',
+  tasks: 'sukhi_tasks',
+  sleep: 'sukhi_sleep',
+  appointments: 'sukhi_appointments',
   calorieGoal: 'sukhi_calorie_goal',
   welcomeSeen: 'sukhi_welcome_seen'
 } as const;
 
-export type WorkoutCategory =
-  | 'Cardio'
-  | 'Strength/Weights'
-  | 'Yoga/Stretching'
-  | 'Home Bodyweight'
-  | 'Other';
+export type WorkoutCategory = 'Cardio' | 'Strength' | 'Yoga' | 'Bodyweight' | 'Other';
 
 export type Workout = {
   id: string;
@@ -35,6 +34,15 @@ export type Meal = {
   createdAt: string;
 };
 
+export type Recipe = {
+  id: string;
+  title: string;
+  ingredients: string;
+  instructions: string;
+  category: string;
+  createdAt: string;
+};
+
 export type GoalCategory = 'Fitness' | 'Nutrition' | 'Wellness' | 'Personal' | 'Other';
 export type GoalStatus = 'In Progress' | 'Completed';
 
@@ -47,6 +55,48 @@ export type Goal = {
   status: GoalStatus;
   createdAt: string;
   completedAt?: string;
+};
+
+export type TaskItem = {
+  id: string;
+  title: string;
+  notes?: string;
+  dueDate?: string;
+  completed: boolean;
+  createdAt: string;
+  completedAt?: string;
+  order: number;
+};
+
+export type TaskList = {
+  id: string;
+  name: string;
+  createdAt: string;
+  tasks: TaskItem[];
+};
+
+export type SleepQuality = 'Great' | 'Good' | 'Okay' | 'Poor';
+
+export type SleepLog = {
+  id: string;
+  date: string;
+  hours: number;
+  quality: SleepQuality;
+  notes?: string;
+  createdAt: string;
+};
+
+export type AppointmentType = 'Doctor' | 'Dentist' | 'Gym' | 'Wellness' | 'Personal' | 'Other';
+
+export type Appointment = {
+  id: string;
+  title: string;
+  type: AppointmentType;
+  date: string;
+  time: string;
+  location?: string;
+  notes?: string;
+  createdAt: string;
 };
 
 export function createId() {
@@ -127,10 +177,41 @@ export function setNumberSetting(key: string, value: number) {
   window.localStorage.setItem(key, String(value));
 }
 
+export function getTaskLists() {
+  const lists = getCollection<TaskList>(STORAGE_KEYS.tasks).filter((list) => Array.isArray(list.tasks));
+  if (lists.length > 0) {
+    return lists.map((list) => ({
+      ...list,
+      tasks: [...list.tasks].sort((a, b) => a.order - b.order)
+    }));
+  }
+
+  return [
+    {
+      id: createId(),
+      name: 'Daily Habits',
+      createdAt: new Date().toISOString(),
+      tasks: []
+    }
+  ];
+}
+
+export function setTaskLists(lists: TaskList[]) {
+  setCollection(STORAGE_KEYS.tasks, lists);
+}
+
 export function todayInputValue(date = new Date()) {
   const offset = date.getTimezoneOffset();
   const localDate = new Date(date.getTime() - offset * 60_000);
   return localDate.toISOString().slice(0, 10);
+}
+
+export function getLastNDays(count: number, end = new Date()) {
+  return Array.from({ length: count }, (_, index) => {
+    const date = new Date(end);
+    date.setDate(end.getDate() - (count - index - 1));
+    return todayInputValue(date);
+  });
 }
 
 export function formatDisplayDate(value?: string) {
@@ -145,6 +226,16 @@ export function formatDisplayDate(value?: string) {
     month: 'short',
     day: 'numeric',
     year: 'numeric'
+  }).format(date);
+}
+
+export function formatShortDate(value: string) {
+  const [year, month, day] = value.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+    day: 'numeric'
   }).format(date);
 }
 
@@ -175,5 +266,13 @@ export function sortNewestByDate<T extends { date?: string; createdAt?: string }
     const left = new Date(`${a.date ?? a.createdAt ?? ''}T00:00:00`).getTime();
     const right = new Date(`${b.date ?? b.createdAt ?? ''}T00:00:00`).getTime();
     return right - left;
+  });
+}
+
+export function sortOldestByDateTime<T extends { date: string; time?: string }>(items: T[]) {
+  return [...items].sort((a, b) => {
+    const left = new Date(`${a.date}T${a.time || '00:00'}`).getTime();
+    const right = new Date(`${b.date}T${b.time || '00:00'}`).getTime();
+    return left - right;
   });
 }

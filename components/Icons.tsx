@@ -162,3 +162,85 @@ export function HeartIcon(props: IconProps) {
     </IconBase>
   );
 }
+
+export function ListIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M8 6h13" />
+      <path d="M8 12h13" />
+      <path d="M8 18h13" />
+      <path d="M3.5 6h.01" />
+      <path d="M3.5 12h.01" />
+      <path d="M3.5 18h.01" />
+    </IconBase>
+  );
+}
+
+export function MessageIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" />
+      <path d="M8 9h8" />
+      <path d="M8 13h5" />
+    </IconBase>
+  );
+}
+
+export function SearchIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m16 16 4 4" />
+    </IconBase>
+  );
+}
+
+export function SendIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="m4 4 17 8-17 8 3-8-3-8Z" />
+      <path d="M7 12h14" />
+    </IconBase>
+  );
+}
+
+export function ChevronDownIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="m6 9 6 6 6-6" />
+    </IconBase>
+  );
+}
+
+export function GripIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M9 5h.01" />
+      <path d="M15 5h.01" />
+      <path d="M9 12h.01" />
+      <path d="M15 12h.01" />
+      <path d="M9 19h.01" />
+      <path d="M15 19h.01" />
+    </IconBase>
+  );
+}
+
+export function MoonIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 7.5 7.5 0 1 0 20.5 14.5Z" />
+    </IconBase>
+  );
+}
+
+export function CalendarCheckIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M7 3v4" />
+      <path d="M17 3v4" />
+      <path d="M4 9h16" />
+      <path d="M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z" />
+      <path d="m8 15 2.4 2.4L16 12" />
+    </IconBase>
+  );
+}

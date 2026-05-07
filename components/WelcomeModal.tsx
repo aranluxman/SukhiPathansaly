@@ -29,34 +29,29 @@ export default function WelcomeModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center overflow-hidden bg-white px-6">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(249,168,212,0.28),transparent_36%),radial-gradient(circle_at_bottom_right,rgba(200,243,220,0.32),transparent_36%)]" />
-
-      <div className="heart-field" aria-hidden="true">
-        <span className="heart-shape heart-one" />
-        <span className="heart-shape heart-two" />
-        <span className="heart-shape heart-three" />
-        <span className="flower-bloom flower-one" />
-        <span className="flower-bloom flower-two" />
-        <span className="flower-bloom flower-three" />
+    <div className="fixed inset-0 z-50 grid place-items-center overflow-hidden bg-luxury-black px-6">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,168,76,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(232,201,109,0.10),transparent_36%)]" />
+      <div className="absolute inset-x-0 top-0 h-px gold-shimmer animate-shimmer" />
+      <div className="welcome-particles" aria-hidden="true">
+        <span className="gold-particle" />
+        <span className="gold-particle" />
+        <span className="gold-particle" />
+        <span className="gold-particle" />
+        <span className="gold-particle" />
       </div>
 
-      <section className="relative mx-auto max-w-2xl text-center">
-        <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-blush-100 text-5xl shadow-soft animate-heartbeat">
-          💌
+      <section className="relative mx-auto max-w-3xl text-center">
+        <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-luxury-line bg-luxury-card text-5xl shadow-gold animate-heartbeat">
+          💛
         </div>
-        <h1 className="text-balance text-4xl font-bold leading-tight text-slate-950 sm:text-6xl">
-          Happy Mother&apos;s Day, Mom 💌
+        <h1 className="font-serif text-balance text-4xl font-bold leading-tight text-luxury-text sm:text-6xl">
+          Happy Mother&apos;s Day, Mom 💛
         </h1>
-        <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-slate-600 sm:text-xl">
-          This is your personal wellness space — built with love by Alux 💕
+        <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-luxury-muted sm:text-xl">
+          Your personal wellness space — built with love by Alux 💌
         </p>
-        <button
-          className="mt-9 inline-flex items-center justify-center rounded-full bg-blush-300 px-7 py-3.5 text-base font-bold text-white shadow-soft transition duration-200 hover:-translate-y-1 hover:bg-blush-400 focus:outline-none focus:ring-4 focus:ring-blush-200"
-          onClick={enterSpace}
-          type="button"
-        >
-          Enter Your Space 🌸
+        <button className="primary-button mt-9 px-7 py-3.5 text-base" onClick={enterSpace} type="button">
+          Enter Your Space ✨
         </button>
       </section>
     </div>

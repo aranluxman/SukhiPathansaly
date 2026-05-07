@@ -128,24 +128,26 @@ export default function GoalsPage() {
     const completed = goal.status === 'Completed';
 
     return (
-      <article className="section-card transition hover:-translate-y-0.5 hover:shadow-soft" key={goal.id}>
+      <article className="section-card section-card-hover" key={goal.id}>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <span
-              className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${
-                completed ? 'bg-emerald-50 text-emerald-700' : 'bg-yellow-50 text-yellow-700'
+              className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold ${
+                completed
+                  ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-300'
+                  : 'border-luxury-line bg-luxury-gold/10 text-luxury-gold-light'
               }`}
             >
               {completed ? '✓ Completed' : 'In Progress'}
             </span>
             <h3
-              className={`mt-3 text-2xl font-bold text-slate-950 ${
-                completed ? 'text-slate-400 line-through decoration-blush-300 decoration-2' : ''
+              className={`mt-3 font-serif text-2xl font-bold ${
+                completed ? 'completed-strike text-luxury-muted' : 'text-luxury-text'
               }`}
             >
               {goal.title}
             </h3>
-            <p className="mt-2 text-sm font-semibold text-slate-500">
+            <p className="mt-2 text-sm font-semibold text-luxury-muted">
               {goal.category}
               {goal.targetDate ? ` · Target ${formatDisplayDate(goal.targetDate)}` : ''}
             </p>
@@ -155,7 +157,7 @@ export default function GoalsPage() {
             {!completed ? (
               <button
                 aria-label={`Mark ${goal.title} as complete`}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-emerald-100 bg-white text-emerald-600 transition hover:bg-emerald-50"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 hover:scale-[1.03] hover:border-emerald-300"
                 onClick={() => completeGoal(goal)}
                 type="button"
               >
@@ -164,7 +166,7 @@ export default function GoalsPage() {
             ) : null}
             <button
               aria-label={`Edit ${goal.title}`}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-blush-100 bg-white text-blush-500 transition hover:bg-blush-50"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-luxury-line bg-luxury-card text-luxury-gold-light hover:scale-[1.03] hover:border-luxury-gold hover:shadow-gold"
               onClick={() => startEdit(goal)}
               type="button"
             >
@@ -181,7 +183,7 @@ export default function GoalsPage() {
           </div>
         </div>
 
-        {goal.description ? <p className="mt-4 leading-7 text-slate-600">{goal.description}</p> : null}
+        {goal.description ? <p className="mt-4 leading-7 text-luxury-muted">{goal.description}</p> : null}
       </article>
     );
   }
@@ -190,27 +192,27 @@ export default function GoalsPage() {
     <div className="page-shell">
       <section className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="soft-label text-blush-600">Goals and milestones</p>
-          <h1 className="mt-2 text-4xl font-bold text-slate-950">Celebrate every step</h1>
-          <p className="mt-3 max-w-2xl text-slate-600">
+          <p className="soft-label text-luxury-gold-light">Goals and milestones</p>
+          <h1 className="mt-2 font-serif text-4xl font-bold text-luxury-text">Celebrate every step</h1>
+          <p className="mt-3 max-w-2xl text-luxury-muted">
             Set intentions, track progress, and keep completed wins where they can be seen.
           </p>
         </div>
-        <div className="rounded-3xl border border-blush-100 bg-blush-50 px-5 py-4 text-center shadow-soft">
-          <p className="text-3xl font-bold text-slate-950">{completedCount}</p>
-          <p className="text-sm font-semibold text-blush-600">goals completed 🎉</p>
+        <div className="section-card px-5 py-4 text-center">
+          <p className="text-3xl font-bold text-luxury-text">{completedCount}</p>
+          <p className="text-sm font-semibold text-luxury-gold-light">goals completed 🎉</p>
         </div>
       </section>
 
       <section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <form className="section-card h-fit" onSubmit={submitGoal}>
           <div className="mb-6 flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blush-50 text-blush-500">
+            <span className="flex h-11 w-11 items-center justify-center rounded-lg border border-luxury-line bg-luxury-gold/10 text-luxury-gold-light">
               <TargetIcon />
             </span>
             <div>
-              <h2 className="text-xl font-bold text-slate-950">{editingId ? 'Edit goal' : 'New goal'}</h2>
-              <p className="text-sm text-slate-500">Make the next milestone feel reachable.</p>
+              <h2 className="font-serif text-xl font-bold text-luxury-text">{editingId ? 'Edit goal' : 'New goal'}</h2>
+              <p className="text-sm text-luxury-muted">Make the next milestone feel reachable.</p>
             </div>
           </div>
 
@@ -264,11 +266,13 @@ export default function GoalsPage() {
 
             <div className="grid gap-2">
               <span className="soft-label">Status</span>
-              <div className="grid grid-cols-2 rounded-2xl bg-slate-50 p-1">
+              <div className="grid grid-cols-2 rounded-lg border border-luxury-line bg-black/30 p-1">
                 {(['In Progress', 'Completed'] as GoalStatus[]).map((status) => (
                   <button
-                    className={`rounded-xl px-3 py-2 text-sm font-bold transition ${
-                      form.status === status ? 'bg-white text-blush-600 shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                    className={`rounded-md px-3 py-2 text-sm font-bold ${
+                      form.status === status
+                        ? 'bg-luxury-gold text-black shadow-gold'
+                        : 'text-luxury-muted hover:text-luxury-gold-light'
                     }`}
                     key={status}
                     onClick={() => toggleStatus(status)}
@@ -295,22 +299,22 @@ export default function GoalsPage() {
 
         <div className="grid gap-7">
           <section className="grid gap-3">
-            <h2 className="text-xl font-bold text-slate-950">In Progress</h2>
+            <h2 className="font-serif text-xl font-bold text-luxury-text">In Progress</h2>
             {inProgressGoals.length > 0 ? (
               inProgressGoals.map(renderGoal)
             ) : (
-              <div className="section-card text-center text-sm font-semibold text-slate-500">
+              <div className="section-card text-center text-sm font-semibold text-luxury-muted">
                 No active goals yet.
               </div>
             )}
           </section>
 
           <section className="grid gap-3">
-            <h2 className="text-xl font-bold text-slate-950">Completed</h2>
+            <h2 className="font-serif text-xl font-bold text-luxury-text">Completed</h2>
             {completedGoals.length > 0 ? (
               completedGoals.map(renderGoal)
             ) : (
-              <div className="section-card text-center text-sm font-semibold text-slate-500">
+              <div className="section-card text-center text-sm font-semibold text-luxury-muted">
                 Completed milestones will show up here.
               </div>
             )}

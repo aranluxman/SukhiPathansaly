@@ -93,26 +93,26 @@ export default function MealsPage() {
   return (
     <div className="page-shell">
       <section className="mb-8">
-        <p className="soft-label text-blush-600">Meal and calorie log</p>
-        <h1 className="mt-2 text-4xl font-bold text-slate-950">Nourish the day</h1>
-        <p className="mt-3 max-w-2xl text-slate-600">
+        <p className="soft-label text-luxury-gold-light">Meal and calorie log</p>
+        <h1 className="mt-2 font-serif text-4xl font-bold text-luxury-text">Nourish the day</h1>
+        <p className="mt-3 max-w-2xl text-luxury-muted">
           Track meals gently with a daily calorie goal that can change whenever it needs to.
         </p>
       </section>
 
-      <section className="mb-8 rounded-3xl border border-blush-100 bg-blush-50/70 p-5 shadow-soft">
+      <section className="section-card section-card-hover mb-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="soft-label text-blush-600">Today&apos;s calories</p>
-            <p className="mt-2 text-4xl font-bold text-slate-950">
+            <p className="soft-label text-luxury-gold-light">Today&apos;s calories</p>
+            <p className="mt-2 text-4xl font-bold text-luxury-text">
               {todaysCalories.toLocaleString()}
-              <span className="ml-2 text-lg font-semibold text-slate-500">/ {calorieGoal.toLocaleString()}</span>
+              <span className="ml-2 text-lg font-semibold text-luxury-muted">/ {calorieGoal.toLocaleString()}</span>
             </p>
           </div>
           <label className="grid gap-2 sm:w-48">
             <span className="soft-label">Daily goal</span>
             <input
-              className="form-field bg-white"
+              className="form-field"
               min="1"
               onChange={(event) => updateGoal(event.target.value)}
               type="number"
@@ -120,9 +120,9 @@ export default function MealsPage() {
             />
           </label>
         </div>
-        <div className="mt-5 h-4 overflow-hidden rounded-full bg-white">
+        <div className="mt-5 h-4 overflow-hidden rounded-full border border-luxury-line bg-black/30">
           <div
-            className="h-full rounded-full bg-blush-300 transition-all duration-500"
+            className="h-full rounded-full bg-luxury-gold shadow-gold"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -131,12 +131,12 @@ export default function MealsPage() {
       <section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <form className="section-card h-fit" onSubmit={submitMeal}>
           <div className="mb-6 flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blush-50 text-blush-500">
+            <span className="flex h-11 w-11 items-center justify-center rounded-lg border border-luxury-line bg-luxury-gold/10 text-luxury-gold-light">
               <UtensilsIcon />
             </span>
             <div>
-              <h2 className="text-xl font-bold text-slate-950">New meal</h2>
-              <p className="text-sm text-slate-500">Add a meal, snack, or little treat.</p>
+              <h2 className="font-serif text-xl font-bold text-luxury-text">New meal</h2>
+              <p className="text-sm text-luxury-muted">Add a meal, snack, or little treat.</p>
             </div>
           </div>
 
@@ -210,26 +210,24 @@ export default function MealsPage() {
         <div className="grid gap-5">
           {meals.length === 0 ? (
             <div className="section-card text-center">
-              <UtensilsIcon className="mx-auto h-10 w-10 text-blush-300" />
-              <h2 className="mt-4 text-xl font-bold text-slate-950">No meals logged yet</h2>
-              <p className="mt-2 text-sm text-slate-500">Breakfast, lunch, dinner, and snacks will gather here.</p>
+              <UtensilsIcon className="mx-auto h-10 w-10 text-luxury-gold" />
+              <h2 className="mt-4 font-serif text-xl font-bold text-luxury-text">No meals logged yet</h2>
+              <p className="mt-2 text-sm text-luxury-muted">Breakfast, lunch, dinner, and snacks will gather here.</p>
             </div>
           ) : (
             groupedMeals.map(({ type, meals: typedMeals }) =>
               typedMeals.length > 0 ? (
                 <section className="grid gap-3" key={type}>
                   <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-bold text-slate-950">{type}</h2>
-                    <span className="rounded-full bg-blush-50 px-3 py-1 text-xs font-bold text-blush-600">
-                      {typedMeals.length}
-                    </span>
+                    <h2 className="font-serif text-lg font-bold text-luxury-text">{type}</h2>
+                    <span className="gold-badge">{typedMeals.length}</span>
                   </div>
                   {typedMeals.map((meal) => (
-                    <article className="section-card" key={meal.id}>
+                    <article className="section-card section-card-hover" key={meal.id}>
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <h3 className="text-2xl font-bold text-slate-950">{meal.name}</h3>
-                          <p className="mt-2 text-sm font-semibold text-slate-500">
+                          <h3 className="font-serif text-2xl font-bold text-luxury-text">{meal.name}</h3>
+                          <p className="mt-2 text-sm font-semibold text-luxury-muted">
                             {meal.calories.toLocaleString()} calories · {formatDisplayDate(meal.date)}
                           </p>
                         </div>
@@ -242,7 +240,7 @@ export default function MealsPage() {
                           <TrashIcon className="h-4 w-4" />
                         </button>
                       </div>
-                      {meal.notes ? <p className="mt-4 leading-7 text-slate-600">{meal.notes}</p> : null}
+                      {meal.notes ? <p className="mt-4 leading-7 text-luxury-muted">{meal.notes}</p> : null}
                     </article>
                   ))}
                 </section>
