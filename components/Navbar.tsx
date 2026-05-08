@@ -8,9 +8,9 @@ import {
   CalendarCheckIcon,
   DumbbellIcon,
   HomeIcon,
+  HeartIcon,
   ListIcon,
   MenuIcon,
-  MessageIcon,
   MoonIcon,
   TargetIcon,
   UtensilsIcon,
@@ -25,8 +25,8 @@ const navItems = [
   { href: '/goals', label: 'Goals', icon: TargetIcon },
   { href: '/tasks', label: 'Tasks', icon: ListIcon },
   { href: '/sleep', label: 'Sleep', icon: MoonIcon },
-  { href: '/appointments', label: 'Appointments', icon: CalendarCheckIcon },
-  { href: '/chat', label: 'Chat', icon: MessageIcon }
+  { href: '/gratitude', label: 'Gratitude', icon: HeartIcon },
+  { href: '/appointments', label: 'Appointments', icon: CalendarCheckIcon }
 ];
 
 function NavLink({

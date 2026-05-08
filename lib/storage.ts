@@ -5,7 +5,9 @@ export const STORAGE_KEYS = {
   goals: 'sukhi_goals',
   tasks: 'sukhi_tasks',
   sleep: 'sukhi_sleep',
+  gratitude: 'sukhi_gratitude',
   appointments: 'sukhi_appointments',
+  appointmentSeedVersion: 'sukhi_appointment_seed_version',
   calorieGoal: 'sukhi_calorie_goal',
   welcomeSeen: 'sukhi_welcome_seen'
 } as const;
@@ -83,6 +85,13 @@ export type SleepLog = {
   hours: number;
   quality: SleepQuality;
   notes?: string;
+  createdAt: string;
+};
+
+export type GratitudeEntry = {
+  id: string;
+  date: string;
+  note: string;
   createdAt: string;
 };
 

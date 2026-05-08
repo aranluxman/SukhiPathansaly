@@ -8,7 +8,6 @@ import {
   DumbbellIcon,
   HeartIcon,
   ListIcon,
-  MessageIcon,
   MoonIcon,
   PlusIcon,
   TargetIcon,
@@ -24,6 +23,7 @@ import {
   TaskList,
   Workout,
   getCollection,
+  GratitudeEntry,
   getTaskLists,
   isSameDate,
   todayInputValue
@@ -58,6 +58,7 @@ export default function Home() {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [taskLists, setTaskLists] = useState<TaskList[]>([]);
   const [sleepLogs, setSleepLogs] = useState<SleepLog[]>([]);
+  const [gratitudeEntries, setGratitudeEntries] = useState<GratitudeEntry[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const today = todayInputValue();
   const quote = useMemo(() => getDailyQuote(), []);
@@ -68,6 +69,7 @@ export default function Home() {
     setGoals(getCollection<Goal>(STORAGE_KEYS.goals));
     setTaskLists(getTaskLists());
     setSleepLogs(getCollection<SleepLog>(STORAGE_KEYS.sleep));
+    setGratitudeEntries(getCollection<GratitudeEntry>(STORAGE_KEYS.gratitude));
     setAppointments(getCollection<Appointment>(STORAGE_KEYS.appointments));
   }, []);
 
@@ -81,6 +83,7 @@ export default function Home() {
     0
   );
   const lastNightSleep = sleepLogs.find((log) => log.date === today)?.hours;
+  const todaysGratitude = gratitudeEntries.filter((entry) => entry.date === today).length;
   const todaysAppointments = appointments.filter((appointment) => appointment.date === today).length;
 
   const quickLinks = [
@@ -90,8 +93,8 @@ export default function Home() {
     { href: '/goals', label: 'Set Goal', icon: TargetIcon },
     { href: '/tasks', label: 'Open Tasks', icon: ListIcon },
     { href: '/sleep', label: 'Log Sleep', icon: MoonIcon },
-    { href: '/appointments', label: 'Appointments', icon: CalendarCheckIcon },
-    { href: '/chat', label: 'Wellness Chat', icon: MessageIcon }
+    { href: '/gratitude', label: 'Gratitude', icon: HeartIcon },
+    { href: '/appointments', label: 'Appointments', icon: CalendarCheckIcon }
   ];
 
   return (
@@ -114,6 +117,25 @@ export default function Home() {
           <p className="soft-label text-luxury-gold-light">Today&apos;s quote</p>
           <p className="mt-4 font-serif text-2xl font-semibold leading-9 text-luxury-text">&ldquo;{quote}&rdquo;</p>
         </aside>
+      </section>
+
+      <section className="section-card section-card-hover mt-10 overflow-hidden">
+        <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+          <div>
+            <p className="soft-label text-luxury-gold-light">Family</p>
+            <h2 className="mt-2 font-serif text-3xl font-bold text-luxury-text">A little piece of home</h2>
+            <p className="mt-3 leading-7 text-luxury-muted">
+              A family memory tucked into the dashboard, because this space is meant to feel personal every time Mom opens it.
+            </p>
+          </div>
+          <div className="overflow-hidden rounded-lg border border-luxury-line bg-black/25">
+            <img
+              alt="Family memory for Sukhi's wellness dashboard"
+              className="h-72 w-full object-cover"
+              src="/family/family-memory.jpg"
+            />
+          </div>
+        </div>
       </section>
 
       <section className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -139,6 +161,13 @@ export default function Home() {
           value={lastNightSleep ? `${lastNightSleep}h` : '0h'}
         >
           <MoonIcon />
+        </SummaryCard>
+        <SummaryCard
+          detail="Gratitude notes written today."
+          title="Gratitude"
+          value={String(todaysGratitude)}
+        >
+          <HeartIcon />
         </SummaryCard>
         <SummaryCard
           detail="Appointments scheduled today."

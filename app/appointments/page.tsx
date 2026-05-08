@@ -11,11 +11,169 @@ import {
   deleteFromCollection,
   formatDisplayDate,
   getCollection,
+  setCollection,
   sortOldestByDateTime,
   todayInputValue
 } from '@/lib/storage';
 
 const appointmentTypes: AppointmentType[] = ['Doctor', 'Dentist', 'Gym', 'Wellness', 'Personal', 'Other'];
+const seededAppointmentVersion = 'family-calendar-may-june-2026-v1';
+
+const seededAppointments: Appointment[] = [
+  {
+    id: 'seed-2026-05-01-ypam-graduation',
+    title: 'YPAM Graduation',
+    type: 'Personal',
+    date: '2026-05-01',
+    time: '09:00',
+    notes: 'Imported from the May 2026 family wall calendar. Time was not listed.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-02-ninos-party',
+    title: "Nino's Party",
+    type: 'Personal',
+    date: '2026-05-02',
+    time: '14:00',
+    notes: 'Wall calendar says 2-5.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-03-cadet-basketball',
+    title: 'Cadet basketball',
+    type: 'Personal',
+    date: '2026-05-03',
+    time: '19:45',
+    notes: 'Imported from the May 2026 family wall calendar.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-06-aran-track-meet',
+    title: 'Aran Track Meet',
+    type: 'Gym',
+    date: '2026-05-06',
+    time: '09:00',
+    notes: 'Time was not listed on the wall calendar.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-14-aran-track-meet',
+    title: 'Aran Track Meet',
+    type: 'Gym',
+    date: '2026-05-14',
+    time: '09:00',
+    notes: 'Time was not listed on the wall calendar.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-17-aarya-birthday-party',
+    title: 'Aarya birthday party',
+    type: 'Personal',
+    date: '2026-05-17',
+    time: '09:00',
+    notes: 'Wall calendar note also says Samantha Gliding. Time was not listed.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-21-aran-track-meet',
+    title: 'Aran Track Meet',
+    type: 'Gym',
+    date: '2026-05-21',
+    time: '09:00',
+    notes: 'Multi-day meet marked from May 21 to May 22. Time was not listed.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-22-aran-track-meet',
+    title: 'Aran Track Meet',
+    type: 'Gym',
+    date: '2026-05-22',
+    time: '09:00',
+    notes: 'Multi-day meet marked from May 21 to May 22. Time was not listed.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-24-collingwood-trip',
+    title: 'Collingwood',
+    type: 'Personal',
+    date: '2026-05-24',
+    time: '09:00',
+    notes: 'Trip marked from May 24 to May 26.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-25-collingwood-trip',
+    title: 'Collingwood',
+    type: 'Personal',
+    date: '2026-05-25',
+    time: '09:00',
+    notes: 'Trip marked from May 24 to May 26.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-26-collingwood-trip',
+    title: 'Collingwood',
+    type: 'Personal',
+    date: '2026-05-26',
+    time: '09:00',
+    notes: 'Trip marked from May 24 to May 26.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-27-aran-track-meet',
+    title: 'Aran Track Meet',
+    type: 'Gym',
+    date: '2026-05-27',
+    time: '09:00',
+    notes: 'Multi-day meet marked from May 27 to May 28. Time was not listed.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-05-28-aran-track-meet',
+    title: 'Aran Track Meet',
+    type: 'Gym',
+    date: '2026-05-28',
+    time: '09:00',
+    notes: 'Multi-day meet marked from May 27 to May 28. Time was not listed.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-06-18-aran-track-meet',
+    title: 'Aran Track Meet',
+    type: 'Gym',
+    date: '2026-06-18',
+    time: '09:00',
+    notes: 'Imported from the June 2026 family wall calendar. Time was not listed.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-06-25-mexico-trip',
+    title: 'Mexico',
+    type: 'Personal',
+    date: '2026-06-25',
+    time: '09:00',
+    notes: 'Trip marked from June 25 to June 27.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-06-26-mexico-trip',
+    title: 'Mexico',
+    type: 'Personal',
+    date: '2026-06-26',
+    time: '09:00',
+    notes: 'Trip marked from June 25 to June 27.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  },
+  {
+    id: 'seed-2026-06-27-mexico-trip',
+    title: 'Mexico',
+    type: 'Personal',
+    date: '2026-06-27',
+    time: '09:00',
+    notes: 'Trip marked from June 25 to June 27.',
+    createdAt: '2026-05-08T00:00:00.000Z'
+  }
+];
 
 const initialForm = {
   title: '',
@@ -61,7 +219,26 @@ export default function AppointmentsPage() {
   const [visibleMonth, setVisibleMonth] = useState(() => new Date());
 
   useEffect(() => {
-    setAppointments(sortOldestByDateTime(getCollection<Appointment>(STORAGE_KEYS.appointments)));
+    const savedAppointments = getCollection<Appointment>(STORAGE_KEYS.appointments);
+    const hasSeeded = window.localStorage.getItem(STORAGE_KEYS.appointmentSeedVersion) === seededAppointmentVersion;
+    const appointmentsToShow = hasSeeded
+      ? savedAppointments
+      : [
+          ...savedAppointments,
+          ...seededAppointments.filter(
+            (seeded) =>
+              !savedAppointments.some(
+                (appointment) => appointment.id === seeded.id || (appointment.title === seeded.title && appointment.date === seeded.date)
+              )
+          )
+        ];
+
+    if (!hasSeeded) {
+      setCollection(STORAGE_KEYS.appointments, appointmentsToShow);
+      window.localStorage.setItem(STORAGE_KEYS.appointmentSeedVersion, seededAppointmentVersion);
+    }
+
+    setAppointments(sortOldestByDateTime(appointmentsToShow));
     setForm((current) => ({ ...current, date: todayInputValue() }));
   }, []);
 
@@ -121,6 +298,20 @@ export default function AppointmentsPage() {
         <p className="mt-3 max-w-2xl text-luxury-muted">
           Keep doctor, dentist, gym bookings, and other appointments in one polished local calendar.
         </p>
+      </section>
+
+      <section className="mb-8 grid gap-4 md:grid-cols-2">
+        {[
+          { src: '/calendar/may-2026-calendar.jpg', label: 'May 2026 family wall calendar' },
+          { src: '/calendar/june-2026-calendar.jpg', label: 'June 2026 family wall calendar' }
+        ].map((photo) => (
+          <figure className="section-card section-card-hover overflow-hidden p-0" key={photo.src}>
+            <img alt={photo.label} className="h-64 w-full object-cover" src={photo.src} />
+            <figcaption className="border-t border-luxury-line px-4 py-3 text-sm font-semibold text-luxury-muted">
+              {photo.label}
+            </figcaption>
+          </figure>
+        ))}
       </section>
 
       <section className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
