@@ -26,7 +26,8 @@ const navItems = [
   { href: '/tasks', label: 'Tasks', icon: ListIcon },
   { href: '/sleep', label: 'Sleep', icon: MoonIcon },
   { href: '/gratitude', label: 'Gratitude', icon: HeartIcon },
-  { href: '/appointments', label: 'Appointments', icon: CalendarCheckIcon }
+  { href: '/appointments', label: 'Appointments', icon: CalendarCheckIcon },
+  { href: '/french', label: 'French', icon: BookIcon }
 ];
 
 function NavLink({

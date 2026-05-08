@@ -14,6 +14,7 @@ import {
   UtensilsIcon
 } from '@/components/Icons';
 import { getDailyQuote } from '@/lib/quotes';
+import { memoryPhotos } from '@/lib/memories';
 import {
   Goal,
   Appointment,
@@ -94,7 +95,8 @@ export default function Home() {
     { href: '/tasks', label: 'Open Tasks', icon: ListIcon },
     { href: '/sleep', label: 'Log Sleep', icon: MoonIcon },
     { href: '/gratitude', label: 'Gratitude', icon: HeartIcon },
-    { href: '/appointments', label: 'Appointments', icon: CalendarCheckIcon }
+    { href: '/appointments', label: 'Appointments', icon: CalendarCheckIcon },
+    { href: '/french', label: 'French Study', icon: BookIcon }
   ];
 
   return (
@@ -120,21 +122,29 @@ export default function Home() {
       </section>
 
       <section className="section-card section-card-hover mt-10 overflow-hidden">
-        <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="soft-label text-luxury-gold-light">Family</p>
-            <h2 className="mt-2 font-serif text-3xl font-bold text-luxury-text">A little piece of home</h2>
-            <p className="mt-3 leading-7 text-luxury-muted">
-              A family memory tucked into the dashboard, because this space is meant to feel personal every time Mom opens it.
+            <p className="soft-label text-luxury-gold-light">Memories</p>
+            <h2 className="mt-2 font-serif text-3xl font-bold text-luxury-text">Family moments to scroll through</h2>
+            <p className="mt-3 max-w-2xl leading-7 text-luxury-muted">
+              A peaceful little gallery for Mom to revisit the people and memories that make this space feel like home.
             </p>
           </div>
-          <div className="overflow-hidden rounded-lg border border-luxury-line bg-black/25">
-            <img
-              alt="Family memory for Sukhi's wellness dashboard"
-              className="h-72 w-full object-cover"
-              src="/family/family-memory.jpg"
-            />
-          </div>
+          <span className="gold-badge">{memoryPhotos.length} photo{memoryPhotos.length === 1 ? '' : 's'}</span>
+        </div>
+
+        <div className="-mx-5 flex snap-x gap-4 overflow-x-auto px-5 pb-3">
+          {memoryPhotos.map((photo) => (
+            <figure
+              className="min-w-[82%] snap-start overflow-hidden rounded-lg border border-luxury-line bg-black/25 sm:min-w-[360px] lg:min-w-[420px]"
+              key={photo.src}
+            >
+              <img alt={photo.alt} className="h-72 w-full object-cover" src={photo.src} />
+              <figcaption className="border-t border-luxury-line px-4 py-3 text-sm font-semibold text-luxury-muted">
+                {photo.caption}
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 

@@ -23,7 +23,8 @@ A black-and-gold personal wellness dashboard built as a Mother's Day gift for Su
 - Sleep log with quality tracking and weekly chart
 - Gratitude of the Day journal with saved reflections
 - Appointments calendar for doctor, dentist, gym, family events, trips, and wellness bookings
-- Family photo section on the dashboard
+- French Study Dashboard with word, verb, and daily practice cards
+- Horizontally scrollable family memories gallery on the dashboard
 
 ## Run Locally
 

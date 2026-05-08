@@ -6,6 +6,7 @@ export const STORAGE_KEYS = {
   tasks: 'sukhi_tasks',
   sleep: 'sukhi_sleep',
   gratitude: 'sukhi_gratitude',
+  frenchPractice: 'sukhi_french_practice',
   appointments: 'sukhi_appointments',
   appointmentSeedVersion: 'sukhi_appointment_seed_version',
   calorieGoal: 'sukhi_calorie_goal',
@@ -92,6 +93,15 @@ export type GratitudeEntry = {
   id: string;
   date: string;
   note: string;
+  createdAt: string;
+};
+
+export type FrenchPracticeEntry = {
+  id: string;
+  date: string;
+  word: string;
+  verb: string;
+  answer: string;
   createdAt: string;
 };
 

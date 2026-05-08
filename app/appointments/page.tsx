@@ -300,20 +300,6 @@ export default function AppointmentsPage() {
         </p>
       </section>
 
-      <section className="mb-8 grid gap-4 md:grid-cols-2">
-        {[
-          { src: '/calendar/may-2026-calendar.jpg', label: 'May 2026 family wall calendar' },
-          { src: '/calendar/june-2026-calendar.jpg', label: 'June 2026 family wall calendar' }
-        ].map((photo) => (
-          <figure className="section-card section-card-hover overflow-hidden p-0" key={photo.src}>
-            <img alt={photo.label} className="h-64 w-full object-cover" src={photo.src} />
-            <figcaption className="border-t border-luxury-line px-4 py-3 text-sm font-semibold text-luxury-muted">
-              {photo.label}
-            </figcaption>
-          </figure>
-        ))}
-      </section>
-
       <section className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="section-card">
           <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
