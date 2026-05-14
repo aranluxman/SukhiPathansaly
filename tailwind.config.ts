@@ -10,13 +10,13 @@ const config: Config = {
     extend: {
       colors: {
         luxury: {
-          black: '#0a0a0a',
-          card: '#111111',
-          gold: '#c9a84c',
-          'gold-light': '#e8c96d',
-          text: '#f5f5f5',
-          muted: '#888888',
-          line: 'rgba(201, 168, 76, 0.2)'
+          black: 'rgb(var(--c-black) / <alpha-value>)',
+          card: 'rgb(var(--c-card) / <alpha-value>)',
+          gold: 'rgb(var(--c-gold) / <alpha-value>)',
+          'gold-light': 'rgb(var(--c-gold-light) / <alpha-value>)',
+          text: 'rgb(var(--c-text) / <alpha-value>)',
+          muted: 'rgb(var(--c-muted) / <alpha-value>)',
+          line: 'rgb(var(--c-gold) / 0.2)'
         }
       },
       fontFamily: {
@@ -24,9 +24,9 @@ const config: Config = {
         serif: ['var(--font-playfair)', '"Playfair Display"', 'serif']
       },
       boxShadow: {
-        gold: '0 0 20px rgba(201, 168, 76, 0.15)',
-        'gold-strong': '0 0 28px rgba(201, 168, 76, 0.25)',
-        card: '0 18px 45px rgba(0, 0, 0, 0.35)'
+        gold: '0 0 20px rgb(var(--c-gold) / 0.18)',
+        'gold-strong': '0 0 28px rgb(var(--c-gold) / 0.28)',
+        card: '0 18px 45px rgb(var(--c-black) / 0.35)'
       },
       keyframes: {
         'page-in': {

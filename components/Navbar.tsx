@@ -6,21 +6,19 @@ import { useState } from 'react';
 import {
   BookIcon,
   CalendarCheckIcon,
-  DumbbellIcon,
-  HomeIcon,
   HeartIcon,
+  HomeIcon,
   ListIcon,
   MenuIcon,
   MoonIcon,
+  SunIcon,
   TargetIcon,
-  UtensilsIcon,
   XIcon
 } from './Icons';
+import { useTheme } from './ThemeProvider';
 
 const navItems = [
   { href: '/', label: 'Home', icon: HomeIcon },
-  { href: '/workouts', label: 'Workouts', icon: DumbbellIcon },
-  { href: '/meals', label: 'Meals', icon: UtensilsIcon },
   { href: '/recipes', label: 'Recipes', icon: BookIcon },
   { href: '/goals', label: 'Goals', icon: TargetIcon },
   { href: '/tasks', label: 'Tasks', icon: ListIcon },
@@ -59,6 +57,28 @@ function NavLink({
   );
 }
 
+function ThemeToggle({ onClick }: { onClick?: () => void }) {
+  const { theme, toggle } = useTheme();
+  const isDark = theme === 'dark';
+
+  function handleClick() {
+    toggle();
+    onClick?.();
+  }
+
+  return (
+    <button
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-luxury-line bg-luxury-card text-luxury-gold-light hover:scale-[1.03] hover:border-luxury-gold hover:shadow-gold"
+      onClick={handleClick}
+      title={isDark ? 'Light mode' : 'Dark mode'}
+      type="button"
+    >
+      {isDark ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
+    </button>
+  );
+}
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
@@ -76,17 +96,21 @@ export default function Navbar() {
           {navItems.map((item) => (
             <NavLink key={item.href} {...item} />
           ))}
+          <ThemeToggle />
         </div>
 
-        <button
-          aria-expanded={open}
-          aria-label="Toggle navigation menu"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-luxury-line bg-luxury-card text-luxury-gold-light hover:scale-[1.03] hover:border-luxury-gold hover:shadow-gold xl:hidden"
-          onClick={() => setOpen((value) => !value)}
-          type="button"
-        >
-          {open ? <XIcon /> : <MenuIcon />}
-        </button>
+        <div className="flex items-center gap-2 xl:hidden">
+          <ThemeToggle />
+          <button
+            aria-expanded={open}
+            aria-label="Toggle navigation menu"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-luxury-line bg-luxury-card text-luxury-gold-light hover:scale-[1.03] hover:border-luxury-gold hover:shadow-gold"
+            onClick={() => setOpen((value) => !value)}
+            type="button"
+          >
+            {open ? <XIcon /> : <MenuIcon />}
+          </button>
+        </div>
       </nav>
 
       {open ? (

@@ -2,8 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Dark theme (default) ── */
 :root {
   color-scheme: dark;
+  --c-black: 10 10 10;
+  --c-card: 17 17 17;
+  --c-gold: 201 168 76;
+  --c-gold-light: 232 201 109;
+  --c-text: 245 245 245;
+  --c-muted: 136 136 136;
+}
+
+/* ── Light theme ── */
+[data-theme='light'] {
+  color-scheme: light;
+  --c-black: 250 249 246;
+  --c-card: 255 255 255;
+  --c-gold: 180 138 36;
+  --c-gold-light: 140 104 16;
+  --c-text: 26 26 26;
+  --c-muted: 90 90 90;
 }
 
 * {
@@ -12,16 +30,17 @@
 
 html {
   scroll-behavior: smooth;
-  background: #0a0a0a;
+  background: rgb(var(--c-black));
 }
 
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(201, 168, 76, 0.10), transparent 30rem),
-    radial-gradient(circle at bottom right, rgba(232, 201, 109, 0.08), transparent 28rem),
-    #0a0a0a;
-  color: #f5f5f5;
+    radial-gradient(circle at top left, rgb(var(--c-gold) / 0.10), transparent 30rem),
+    radial-gradient(circle at bottom right, rgb(var(--c-gold) / 0.07), transparent 28rem),
+    rgb(var(--c-black));
+  color: rgb(var(--c-text));
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 a,
@@ -40,8 +59,8 @@ textarea {
 }
 
 ::selection {
-  background: rgba(201, 168, 76, 0.35);
-  color: #f5f5f5;
+  background: rgb(var(--c-gold) / 0.35);
+  color: rgb(var(--c-text));
 }
 
 @layer components {
@@ -50,11 +69,12 @@ textarea {
   }
 
   .section-card {
-    border: 1px solid rgba(201, 168, 76, 0.2);
-    border-radius: 0.5rem;
-    background: #111111;
-    padding: 1.25rem;
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgb(var(--c-gold) / 0.2);
+    border-radius: 0.75rem;
+    background: rgb(var(--c-card));
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px rgb(var(--c-black) / 0.18);
+    transition: background 0.3s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
   .section-card-hover {
@@ -62,28 +82,28 @@ textarea {
   }
 
   .section-card-hover:hover {
-    border-color: #c9a84c;
-    box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+    border-color: rgb(var(--c-gold) / 0.6);
+    box-shadow: 0 0 24px rgb(var(--c-gold) / 0.15);
   }
 
   .form-field {
     width: 100%;
-    border: 1px solid rgba(201, 168, 76, 0.2);
+    border: 1px solid rgb(var(--c-gold) / 0.22);
     border-radius: 0.5rem;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgb(var(--c-black) / 0.3);
     padding: 0.75rem 1rem;
-    color: #f5f5f5;
+    color: rgb(var(--c-text));
     font-size: 0.875rem;
     outline: none;
   }
 
   .form-field::placeholder {
-    color: #888888;
+    color: rgb(var(--c-muted));
   }
 
   .form-field:focus {
-    border-color: #c9a84c;
-    box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+    border-color: rgb(var(--c-gold));
+    box-shadow: 0 0 20px rgb(var(--c-gold) / 0.15);
   }
 
   .primary-button {
@@ -92,22 +112,22 @@ textarea {
     justify-content: center;
     gap: 0.5rem;
     border-radius: 0.5rem;
-    background: #c9a84c;
+    background: rgb(var(--c-gold));
     padding: 0.75rem 1.25rem;
-    color: #000000;
+    color: #ffffff;
     font-size: 0.875rem;
     font-weight: 700;
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 4px 18px rgb(var(--c-gold) / 0.3);
   }
 
   .primary-button:hover {
     transform: scale(1.03);
-    background: #e8c96d;
-    box-shadow: 0 0 28px rgba(201, 168, 76, 0.25);
+    background: rgb(var(--c-gold-light));
+    box-shadow: 0 0 28px rgb(var(--c-gold) / 0.35);
   }
 
   .primary-button:focus {
-    outline: 2px solid #e8c96d;
+    outline: 2px solid rgb(var(--c-gold-light));
     outline-offset: 2px;
   }
 
@@ -116,20 +136,20 @@ textarea {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border: 1px solid rgba(201, 168, 76, 0.2);
+    border: 1px solid rgb(var(--c-gold) / 0.25);
     border-radius: 0.5rem;
-    background: #111111;
+    background: rgb(var(--c-card));
     padding: 0.625rem 1rem;
-    color: #f5f5f5;
+    color: rgb(var(--c-text));
     font-size: 0.875rem;
     font-weight: 700;
   }
 
   .secondary-button:hover {
     transform: scale(1.03);
-    border-color: #c9a84c;
-    color: #e8c96d;
-    box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+    border-color: rgb(var(--c-gold));
+    color: rgb(var(--c-gold-light));
+    box-shadow: 0 0 20px rgb(var(--c-gold) / 0.15);
   }
 
   .danger-button {
@@ -151,7 +171,7 @@ textarea {
   }
 
   .soft-label {
-    color: #888888;
+    color: rgb(var(--c-muted));
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.18em;
@@ -161,18 +181,18 @@ textarea {
   .gold-badge {
     display: inline-flex;
     align-items: center;
-    border: 1px solid rgba(201, 168, 76, 0.2);
+    border: 1px solid rgb(var(--c-gold) / 0.25);
     border-radius: 999px;
-    background: rgba(201, 168, 76, 0.1);
+    background: rgb(var(--c-gold) / 0.12);
     padding: 0.25rem 0.75rem;
-    color: #e8c96d;
+    color: rgb(var(--c-gold-light));
     font-size: 0.75rem;
     font-weight: 700;
   }
 }
 
 .gold-gradient-text {
-  background: linear-gradient(90deg, #c9a84c, #f4df8b, #c9a84c);
+  background: linear-gradient(90deg, rgb(var(--c-gold)), rgb(var(--c-gold-light)), rgb(var(--c-gold)));
   background-clip: text;
   color: transparent;
 }
@@ -188,7 +208,7 @@ textarea {
   width: 100%;
   height: 1px;
   content: '';
-  background: #c9a84c;
+  background: rgb(var(--c-gold));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.25s ease;
@@ -212,42 +232,19 @@ textarea {
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 999px;
-  background: rgba(232, 201, 109, 0.75);
-  box-shadow: 0 0 18px rgba(201, 168, 76, 0.55);
+  background: rgb(var(--c-gold-light) / 0.75);
+  box-shadow: 0 0 18px rgb(var(--c-gold) / 0.55);
   animation: float 6s ease-in-out infinite;
 }
 
-.gold-particle:nth-child(1) {
-  left: 12%;
-  top: 18%;
-}
-
-.gold-particle:nth-child(2) {
-  left: 82%;
-  top: 24%;
-  animation-delay: -1.6s;
-}
-
-.gold-particle:nth-child(3) {
-  left: 22%;
-  top: 72%;
-  animation-delay: -2.8s;
-}
-
-.gold-particle:nth-child(4) {
-  left: 70%;
-  top: 68%;
-  animation-delay: -4s;
-}
-
-.gold-particle:nth-child(5) {
-  left: 47%;
-  top: 12%;
-  animation-delay: -5.2s;
-}
+.gold-particle:nth-child(1) { left: 12%; top: 18%; }
+.gold-particle:nth-child(2) { left: 82%; top: 24%; animation-delay: -1.6s; }
+.gold-particle:nth-child(3) { left: 22%; top: 72%; animation-delay: -2.8s; }
+.gold-particle:nth-child(4) { left: 70%; top: 68%; animation-delay: -4s; }
+.gold-particle:nth-child(5) { left: 47%; top: 12%; animation-delay: -5.2s; }
 
 .gold-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(232, 201, 109, 0.22), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--c-gold-light) / 0.22), transparent);
   background-size: 200% 100%;
 }
 
@@ -255,13 +252,8 @@ textarea {
   animation: typing-pulse 1.1s ease-in-out infinite;
 }
 
-.typing-dot:nth-child(2) {
-  animation-delay: 0.16s;
-}
-
-.typing-dot:nth-child(3) {
-  animation-delay: 0.32s;
-}
+.typing-dot:nth-child(2) { animation-delay: 0.16s; }
+.typing-dot:nth-child(3) { animation-delay: 0.32s; }
 
 .completed-strike {
   background-image: linear-gradient(currentColor, currentColor);
@@ -270,24 +262,23 @@ textarea {
   background-size: 100% 1px;
 }
 
-@keyframes typing-pulse {
-  0%,
-  70%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.35;
-  }
+/* Light mode overrides for dark-hardcoded utility classes */
+[data-theme='light'] .bg-black\/20,
+[data-theme='light'] .bg-black\/25 {
+  background-color: rgb(0 0 0 / 0.04) !important;
+}
 
-  35% {
-    transform: translateY(-4px);
-    opacity: 1;
-  }
+[data-theme='light'] .bg-luxury-black\/90 {
+  background-color: rgb(var(--c-black) / 0.93) !important;
+}
+
+@keyframes typing-pulse {
+  0%, 70%, 100% { transform: translateY(0); opacity: 0.35; }
+  35% { transform: translateY(-4px); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;

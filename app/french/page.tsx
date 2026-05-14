@@ -13,62 +13,57 @@ import {
 } from '@/lib/storage';
 
 const words = [
-  {
-    french: 'maison',
-    english: 'house',
-    pronunciation: 'meh-zon',
-    sentence: "J'habite dans une maison.",
-    sentenceMeaning: 'I live in a house.'
-  },
-  {
-    french: 'livre',
-    english: 'book',
-    pronunciation: 'leev-ruh',
-    sentence: 'Je lis un livre.',
-    sentenceMeaning: 'I am reading a book.'
-  },
-  {
-    french: 'école',
-    english: 'school',
-    pronunciation: 'ay-kol',
-    sentence: "L'école est près de la maison.",
-    sentenceMeaning: 'The school is near the house.'
-  },
-  {
-    french: 'autobus',
-    english: 'bus',
-    pronunciation: 'oh-toh-boos',
-    sentence: "Je prends l'autobus.",
-    sentenceMeaning: 'I take the bus.'
-  },
-  {
-    french: 'fenêtre',
-    english: 'window',
-    pronunciation: 'fuh-net-ruh',
-    sentence: 'La fenêtre est ouverte.',
-    sentenceMeaning: 'The window is open.'
-  },
-  {
-    french: 'chaise',
-    english: 'chair',
-    pronunciation: 'shehz',
-    sentence: 'La chaise est confortable.',
-    sentenceMeaning: 'The chair is comfortable.'
-  },
-  {
-    french: 'porte',
-    english: 'door',
-    pronunciation: 'port',
-    sentence: 'La porte est fermée.',
-    sentenceMeaning: 'The door is closed.'
-  },
-  {
-    french: 'avion',
-    english: 'airplane',
-    pronunciation: 'ah-vyohn',
-    sentence: "L'avion arrive demain.",
-    sentenceMeaning: 'The airplane arrives tomorrow.'
-  }
+  { french: 'maison', english: 'house', pronunciation: 'meh-zon', sentence: "J'habite dans une maison.", sentenceMeaning: 'I live in a house.' },
+  { french: 'livre', english: 'book', pronunciation: 'leev-ruh', sentence: 'Je lis un livre.', sentenceMeaning: 'I am reading a book.' },
+  { french: 'école', english: 'school', pronunciation: 'ay-kol', sentence: "L'école est près de la maison.", sentenceMeaning: 'The school is near the house.' },
+  { french: 'autobus', english: 'bus', pronunciation: 'oh-toh-boos', sentence: "Je prends l'autobus.", sentenceMeaning: 'I take the bus.' },
+  { french: 'fenêtre', english: 'window', pronunciation: 'fuh-net-ruh', sentence: 'La fenêtre est ouverte.', sentenceMeaning: 'The window is open.' },
+  { french: 'chaise', english: 'chair', pronunciation: 'shehz', sentence: 'La chaise est confortable.', sentenceMeaning: 'The chair is comfortable.' },
+  { french: 'porte', english: 'door', pronunciation: 'port', sentence: 'La porte est fermée.', sentenceMeaning: 'The door is closed.' },
+  { french: 'avion', english: 'airplane', pronunciation: 'ah-vyohn', sentence: "L'avion arrive demain.", sentenceMeaning: 'The airplane arrives tomorrow.' },
+  { french: 'ami', english: 'friend', pronunciation: 'ah-mee', sentence: "Mon ami est gentil.", sentenceMeaning: 'My friend is kind.' },
+  { french: 'eau', english: 'water', pronunciation: 'oh', sentence: "Je bois de l'eau.", sentenceMeaning: 'I drink water.' },
+  { french: 'pain', english: 'bread', pronunciation: 'pan', sentence: 'Le pain est chaud.', sentenceMeaning: 'The bread is warm.' },
+  { french: 'lait', english: 'milk', pronunciation: 'leh', sentence: 'Je bois du lait le matin.', sentenceMeaning: 'I drink milk in the morning.' },
+  { french: 'voiture', english: 'car', pronunciation: 'vwah-tyoor', sentence: 'La voiture est rouge.', sentenceMeaning: 'The car is red.' },
+  { french: 'jardin', english: 'garden', pronunciation: 'zhar-dan', sentence: 'Le jardin est beau.', sentenceMeaning: 'The garden is beautiful.' },
+  { french: 'fleur', english: 'flower', pronunciation: 'flur', sentence: 'La fleur sent bon.', sentenceMeaning: 'The flower smells good.' },
+  { french: 'soleil', english: 'sun', pronunciation: 'so-lay', sentence: 'Le soleil brille aujourd\'hui.', sentenceMeaning: 'The sun shines today.' },
+  { french: 'lune', english: 'moon', pronunciation: 'lyoon', sentence: 'La lune est pleine ce soir.', sentenceMeaning: 'The moon is full tonight.' },
+  { french: 'étoile', english: 'star', pronunciation: 'ay-twahl', sentence: 'Je vois une étoile dans le ciel.', sentenceMeaning: 'I see a star in the sky.' },
+  { french: 'mer', english: 'sea', pronunciation: 'mehr', sentence: 'La mer est calme aujourd\'hui.', sentenceMeaning: 'The sea is calm today.' },
+  { french: 'montagne', english: 'mountain', pronunciation: 'mon-tan-yuh', sentence: 'La montagne est haute.', sentenceMeaning: 'The mountain is tall.' },
+  { french: 'arbre', english: 'tree', pronunciation: 'ar-bruh', sentence: "L'arbre est grand.", sentenceMeaning: 'The tree is tall.' },
+  { french: 'oiseau', english: 'bird', pronunciation: 'wah-zoh', sentence: "L'oiseau chante bien.", sentenceMeaning: 'The bird sings beautifully.' },
+  { french: 'chat', english: 'cat', pronunciation: 'shah', sentence: 'Le chat dort sur le canapé.', sentenceMeaning: 'The cat sleeps on the sofa.' },
+  { french: 'chien', english: 'dog', pronunciation: 'shyan', sentence: 'Mon chien est fidèle.', sentenceMeaning: 'My dog is loyal.' },
+  { french: 'famille', english: 'family', pronunciation: 'fah-mee-yuh', sentence: "J'aime ma famille.", sentenceMeaning: 'I love my family.' },
+  { french: 'enfant', english: 'child', pronunciation: 'ahn-fahn', sentence: "L'enfant rit beaucoup.", sentenceMeaning: 'The child laughs a lot.' },
+  { french: 'mère', english: 'mother', pronunciation: 'mehr', sentence: 'Ma mère est gentille.', sentenceMeaning: 'My mother is kind.' },
+  { french: 'père', english: 'father', pronunciation: 'pehr', sentence: 'Mon père travaille beaucoup.', sentenceMeaning: 'My father works a lot.' },
+  { french: 'sœur', english: 'sister', pronunciation: 'sur', sentence: 'Ma sœur est drôle.', sentenceMeaning: 'My sister is funny.' },
+  { french: 'frère', english: 'brother', pronunciation: 'frehr', sentence: 'Mon frère joue au football.', sentenceMeaning: 'My brother plays football.' },
+  { french: 'grand-mère', english: 'grandmother', pronunciation: 'grahn-mehr', sentence: 'Ma grand-mère fait de bons gâteaux.', sentenceMeaning: 'My grandmother makes good cakes.' },
+  { french: 'grand-père', english: 'grandfather', pronunciation: 'grahn-pehr', sentence: 'Mon grand-père raconte des histoires.', sentenceMeaning: 'My grandfather tells stories.' },
+  { french: 'cuisine', english: 'kitchen', pronunciation: 'kwee-zeen', sentence: 'La cuisine sent bon.', sentenceMeaning: 'The kitchen smells good.' },
+  { french: 'chambre', english: 'bedroom', pronunciation: 'shahm-bruh', sentence: 'Ma chambre est propre.', sentenceMeaning: 'My bedroom is clean.' },
+  { french: 'salon', english: 'living room', pronunciation: 'sah-lon', sentence: 'Nous regardons la télé dans le salon.', sentenceMeaning: 'We watch TV in the living room.' },
+  { french: 'table', english: 'table', pronunciation: 'tah-bluh', sentence: 'La table est ronde.', sentenceMeaning: 'The table is round.' },
+  { french: 'lit', english: 'bed', pronunciation: 'lee', sentence: 'Le lit est confortable.', sentenceMeaning: 'The bed is comfortable.' },
+  { french: 'rue', english: 'street', pronunciation: 'ryoo', sentence: 'La rue est longue.', sentenceMeaning: 'The street is long.' },
+  { french: 'ville', english: 'city', pronunciation: 'veel', sentence: 'La ville est grande.', sentenceMeaning: 'The city is big.' },
+  { french: 'pays', english: 'country', pronunciation: 'pay-ee', sentence: 'Mon pays est beau.', sentenceMeaning: 'My country is beautiful.' },
+  { french: 'temps', english: 'weather / time', pronunciation: 'tahn', sentence: 'Le temps est beau.', sentenceMeaning: 'The weather is nice.' },
+  { french: 'jour', english: 'day', pronunciation: 'zhoor', sentence: 'Bonne journée!', sentenceMeaning: 'Have a good day!' },
+  { french: 'nuit', english: 'night', pronunciation: 'nwee', sentence: 'La nuit est tranquille.', sentenceMeaning: 'The night is quiet.' },
+  { french: 'matin', english: 'morning', pronunciation: 'mah-tan', sentence: 'Je me lève le matin tôt.', sentenceMeaning: 'I wake up early in the morning.' },
+  { french: 'soir', english: 'evening', pronunciation: 'swahr', sentence: 'Je me repose le soir.', sentenceMeaning: 'I rest in the evening.' },
+  { french: 'semaine', english: 'week', pronunciation: 'suh-mehn', sentence: 'La semaine passe vite.', sentenceMeaning: 'The week goes by fast.' },
+  { french: 'mois', english: 'month', pronunciation: 'mwah', sentence: 'Ce mois est beau.', sentenceMeaning: 'This month is lovely.' },
+  { french: 'année', english: 'year', pronunciation: 'ah-nay', sentence: 'Bonne année!', sentenceMeaning: 'Happy New Year!' },
+  { french: 'nourriture', english: 'food', pronunciation: 'noo-ree-tyoor', sentence: "La nourriture est délicieuse.", sentenceMeaning: 'The food is delicious.' },
+  { french: 'musique', english: 'music', pronunciation: 'myoo-zeek', sentence: "J'écoute de la musique.", sentenceMeaning: 'I listen to music.' },
+  { french: 'couleur', english: 'colour', pronunciation: 'koo-lur', sentence: 'Quelle est ta couleur préférée?', sentenceMeaning: 'What is your favourite colour?' }
 ];
 
 const verbs = [
@@ -95,6 +90,62 @@ const verbs = [
     present: ['je parle', 'tu parles', 'il/elle parle', 'nous parlons', 'vous parlez', 'ils/elles parlent'],
     passe: ["j'ai parlé", 'tu as parlé', 'il/elle a parlé', 'nous avons parlé', 'vous avez parlé', 'ils/elles ont parlé'],
     future: ['je parlerai', 'tu parleras', 'il/elle parlera', 'nous parlerons', 'vous parlerez', 'ils/elles parleront']
+  },
+  {
+    infinitive: 'avoir',
+    meaning: 'to have',
+    pronunciation: 'ah-vwahr',
+    present: ["j'ai", 'tu as', 'il/elle a', 'nous avons', 'vous avez', 'ils/elles ont'],
+    passe: ["j'ai eu", 'tu as eu', 'il/elle a eu', 'nous avons eu', 'vous avez eu', 'ils/elles ont eu'],
+    future: ["j'aurai", 'tu auras', 'il/elle aura', 'nous aurons', 'vous aurez', 'ils/elles auront']
+  },
+  {
+    infinitive: 'être',
+    meaning: 'to be',
+    pronunciation: 'et-ruh',
+    present: ['je suis', 'tu es', 'il/elle est', 'nous sommes', 'vous êtes', 'ils/elles sont'],
+    passe: ["j'ai été", 'tu as été', 'il/elle a été', 'nous avons été', 'vous avez été', 'ils/elles ont été'],
+    future: ['je serai', 'tu seras', 'il/elle sera', 'nous serons', 'vous serez', 'ils/elles seront']
+  },
+  {
+    infinitive: 'aller',
+    meaning: 'to go',
+    pronunciation: 'ah-lay',
+    present: ['je vais', 'tu vas', 'il/elle va', 'nous allons', 'vous allez', 'ils/elles vont'],
+    passe: ['je suis allé(e)', 'tu es allé(e)', 'il/elle est allé(e)', 'nous sommes allé(e)s', 'vous êtes allé(e)s', 'ils/elles sont allé(e)s'],
+    future: ["j'irai", 'tu iras', 'il/elle ira', 'nous irons', 'vous irez', 'ils/elles iront']
+  },
+  {
+    infinitive: 'faire',
+    meaning: 'to do / to make',
+    pronunciation: 'fehr',
+    present: ['je fais', 'tu fais', 'il/elle fait', 'nous faisons', 'vous faites', 'ils/elles font'],
+    passe: ["j'ai fait", 'tu as fait', 'il/elle a fait', 'nous avons fait', 'vous avez fait', 'ils/elles ont fait'],
+    future: ['je ferai', 'tu feras', 'il/elle fera', 'nous ferons', 'vous ferez', 'ils/elles feront']
+  },
+  {
+    infinitive: 'venir',
+    meaning: 'to come',
+    pronunciation: 'vuh-neer',
+    present: ['je viens', 'tu viens', 'il/elle vient', 'nous venons', 'vous venez', 'ils/elles viennent'],
+    passe: ['je suis venu(e)', 'tu es venu(e)', 'il/elle est venu(e)', 'nous sommes venu(e)s', 'vous êtes venu(e)s', 'ils/elles sont venu(e)s'],
+    future: ['je viendrai', 'tu viendras', 'il/elle viendra', 'nous viendrons', 'vous viendrez', 'ils/elles viendront']
+  },
+  {
+    infinitive: 'dormir',
+    meaning: 'to sleep',
+    pronunciation: 'dor-meer',
+    present: ['je dors', 'tu dors', 'il/elle dort', 'nous dormons', 'vous dormez', 'ils/elles dorment'],
+    passe: ["j'ai dormi", 'tu as dormi', 'il/elle a dormi', 'nous avons dormi', 'vous avez dormi', 'ils/elles ont dormi'],
+    future: ['je dormirai', 'tu dormiras', 'il/elle dormira', 'nous dormirons', 'vous dormirez', 'ils/elles dormiront']
+  },
+  {
+    infinitive: 'lire',
+    meaning: 'to read',
+    pronunciation: 'leer',
+    present: ['je lis', 'tu lis', 'il/elle lit', 'nous lisons', 'vous lisez', 'ils/elles lisent'],
+    passe: ["j'ai lu", 'tu as lu', 'il/elle a lu', 'nous avons lu', 'vous avez lu', 'ils/elles ont lu'],
+    future: ['je lirai', 'tu liras', 'il/elle lira', 'nous lirons', 'vous lirez', 'ils/elles liront']
   }
 ];
 
@@ -174,7 +225,7 @@ export default function FrenchStudyPage() {
           <p className="soft-label text-luxury-gold-light">French practice</p>
           <h1 className="mt-2 font-serif text-4xl font-bold text-luxury-text">French Study Dashboard</h1>
           <p className="mt-3 max-w-2xl text-luxury-muted">
-            Build confidence with a small word, a useful verb, and one simple practice sentence each day.
+            Build confidence with a small word, a useful verb, and one simple practice sentence each day. {words.length} words to explore — a new one every day.
           </p>
         </div>
 
