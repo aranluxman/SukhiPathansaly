@@ -5,24 +5,28 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   BookIcon,
   CalendarCheckIcon,
-  DumbbellIcon,
   HeartIcon,
   ListIcon,
   MoonIcon,
   PlusIcon,
-  TargetIcon,
-  UtensilsIcon
+  TargetIcon
 } from '@/components/Icons';
 import { getDailyQuote } from '@/lib/quotes';
+
+function renderBoldQuote(quote: string): React.ReactNode[] {
+  return quote.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith('**') && part.endsWith('**')
+      ? <strong key={i}>{part.slice(2, -2)}</strong>
+      : part
+  );
+}
 import { memoryPhotos } from '@/lib/memories';
 import {
   Goal,
   Appointment,
-  Meal,
   STORAGE_KEYS,
   SleepLog,
   TaskList,
-  Workout,
   getCollection,
   GratitudeEntry,
   getTaskLists,
@@ -54,8 +58,6 @@ function SummaryCard({
 }
 
 export default function Home() {
-  const [workouts, setWorkouts] = useState<Workout[]>([]);
-  const [meals, setMeals] = useState<Meal[]>([]);
   const [goals, setGoals] = useState<Goal[]>([]);
   const [taskLists, setTaskLists] = useState<TaskList[]>([]);
   const [sleepLogs, setSleepLogs] = useState<SleepLog[]>([]);
@@ -65,8 +67,6 @@ export default function Home() {
   const quote = useMemo(() => getDailyQuote(), []);
 
   useEffect(() => {
-    setWorkouts(getCollection<Workout>(STORAGE_KEYS.workouts));
-    setMeals(getCollection<Meal>(STORAGE_KEYS.meals));
     setGoals(getCollection<Goal>(STORAGE_KEYS.goals));
     setTaskLists(getTaskLists());
     setSleepLogs(getCollection<SleepLog>(STORAGE_KEYS.sleep));
@@ -74,10 +74,6 @@ export default function Home() {
     setAppointments(getCollection<Appointment>(STORAGE_KEYS.appointments));
   }, []);
 
-  const todaysWorkouts = workouts.filter((workout) => isSameDate(workout.date, today));
-  const todaysCalories = meals
-    .filter((meal) => isSameDate(meal.date, today))
-    .reduce((sum, meal) => sum + meal.calories, 0);
   const activeGoals = goals.filter((goal) => goal.status === 'In Progress').length;
   const pendingTasks = taskLists.reduce(
     (sum, list) => sum + list.tasks.filter((task) => !task.completed).length,
@@ -88,8 +84,6 @@ export default function Home() {
   const todaysAppointments = appointments.filter((appointment) => appointment.date === today).length;
 
   const quickLinks = [
-    { href: '/workouts', label: 'Log Workout', icon: DumbbellIcon },
-    { href: '/meals', label: 'Add Meal', icon: UtensilsIcon },
     { href: '/recipes', label: 'Find Recipes', icon: BookIcon },
     { href: '/goals', label: 'Set Goal', icon: TargetIcon },
     { href: '/tasks', label: 'Open Tasks', icon: ListIcon },
@@ -111,13 +105,15 @@ export default function Home() {
             Welcome back, Sukhi 💛
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-luxury-muted">
-            A calm, polished space to track movement, meals, recipes, goals, tasks, and little moments of care.
+            A calm, polished space to track recipes, goals, tasks, gratitude, sleep, appointments, and French practice.
           </p>
         </div>
 
         <aside className="section-card section-card-hover">
           <p className="soft-label text-luxury-gold-light">Today&apos;s quote</p>
-          <p className="mt-4 font-serif text-2xl font-semibold leading-9 text-luxury-text">&ldquo;{quote}&rdquo;</p>
+          <p className="mt-4 font-serif text-2xl font-semibold leading-9 text-luxury-text">
+            &ldquo;{renderBoldQuote(quote)}&rdquo;
+          </p>
         </aside>
       </section>
 
@@ -136,7 +132,7 @@ export default function Home() {
         <div className="-mx-5 flex snap-x gap-4 overflow-x-auto px-5 pb-3">
           {memoryPhotos.map((photo) => (
             <figure
-              className="min-w-[82%] snap-start overflow-hidden rounded-lg border border-luxury-line bg-black/25 sm:min-w-[360px] lg:min-w-[420px]"
+              className="min-w-[82%] snap-start overflow-hidden rounded-xl border border-luxury-line bg-black/25 sm:min-w-[360px] lg:min-w-[420px]"
               key={photo.src}
             >
               <img alt={photo.alt} className="h-72 w-full object-cover" src={photo.src} />
@@ -149,16 +145,6 @@ export default function Home() {
       </section>
 
       <section className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <SummaryCard
-          detail={todaysWorkouts.length === 1 ? 'One beautiful session today.' : 'Sessions recorded for today.'}
-          title="Workouts logged"
-          value={String(todaysWorkouts.length)}
-        >
-          <DumbbellIcon />
-        </SummaryCard>
-        <SummaryCard detail="Calories logged for today." title="Calories today" value={todaysCalories.toLocaleString()}>
-          <UtensilsIcon />
-        </SummaryCard>
         <SummaryCard detail="Goals still moving forward." title="Active goals" value={String(activeGoals)}>
           <TargetIcon />
         </SummaryCard>
@@ -172,18 +158,10 @@ export default function Home() {
         >
           <MoonIcon />
         </SummaryCard>
-        <SummaryCard
-          detail="Gratitude notes written today."
-          title="Gratitude"
-          value={String(todaysGratitude)}
-        >
+        <SummaryCard detail="Gratitude notes written today." title="Gratitude" value={String(todaysGratitude)}>
           <HeartIcon />
         </SummaryCard>
-        <SummaryCard
-          detail="Appointments scheduled today."
-          title="Appointments"
-          value={String(todaysAppointments)}
-        >
+        <SummaryCard detail="Appointments scheduled today." title="Appointments" value={String(todaysAppointments)}>
           <CalendarCheckIcon />
         </SummaryCard>
       </section>
