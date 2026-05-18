@@ -2,7 +2,17 @@
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { BookIcon, ChevronDownIcon, ExternalLinkIcon, PlusIcon, SearchIcon, TrashIcon } from '@/components/Icons';
-import { Recipe, STORAGE_KEYS, addToCollection, createId, deleteFromCollection, getCollection } from '@/lib/storage';
+import { deleteCloudItem, fetchCloudCollection, seedCloudCollection, upsertCloudItem } from '@/lib/cloudStorage';
+import {
+  CLOUD_COLLECTIONS,
+  Recipe,
+  STORAGE_KEYS,
+  addToCollection,
+  createId,
+  deleteFromCollection,
+  getCollection,
+  setCollection
+} from '@/lib/storage';
 
 const notebookUrl = 'https://notebooklm.google.com/notebook/7b4113c0-d161-4605-b4ec-3c8d7dad6521';
 
@@ -20,7 +30,21 @@ export default function RecipesPage() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   useEffect(() => {
-    setRecipes(getCollection<Recipe>(STORAGE_KEYS.recipes));
+    const localRecipes = getCollection<Recipe>(STORAGE_KEYS.recipes);
+    setRecipes(localRecipes);
+
+    fetchCloudCollection<Recipe>(CLOUD_COLLECTIONS.recipes)
+      .then((cloudRecipes) => {
+        if (cloudRecipes.length > 0) {
+          setCollection(STORAGE_KEYS.recipes, cloudRecipes);
+          setRecipes(cloudRecipes);
+        } else if (localRecipes.length > 0) {
+          void seedCloudCollection(CLOUD_COLLECTIONS.recipes, localRecipes);
+        }
+      })
+      .catch(() => {
+        // Local storage remains the offline fallback.
+      });
   }, []);
 
   const filteredRecipes = useMemo(() => {
@@ -55,12 +79,14 @@ export default function RecipesPage() {
 
     const nextRecipes = addToCollection<Recipe>(STORAGE_KEYS.recipes, recipe);
     setRecipes(nextRecipes);
+    void upsertCloudItem(CLOUD_COLLECTIONS.recipes, recipe);
     setExpandedId(recipe.id);
     setForm(initialForm);
   }
 
   function deleteRecipe(id: string) {
     setRecipes(deleteFromCollection<Recipe>(STORAGE_KEYS.recipes, id));
+    void deleteCloudItem(CLOUD_COLLECTIONS.recipes, id);
     if (expandedId === id) {
       setExpandedId(null);
     }
@@ -72,7 +98,7 @@ export default function RecipesPage() {
         <div>
           <p className="soft-label text-luxury-gold-light">Recipe finder</p>
           <h1 className="mt-2 font-serif text-4xl font-bold text-luxury-text">
-            Search your personal recipe collection 🍽️
+            Search your personal recipe collection
           </h1>
           <p className="mt-3 max-w-2xl text-luxury-muted">
             A refined home for her NotebookLM recipe book and any family recipes she wants to save by hand.
@@ -98,12 +124,12 @@ export default function RecipesPage() {
 
       <section className="section-card section-card-hover mb-8 text-center">
         <BookIcon className="mx-auto h-12 w-12 text-luxury-gold-light" />
-        <h2 className="mt-4 font-serif text-2xl font-bold text-luxury-text">Your recipes are stored in your personal NotebookLM notebook.</h2>
+        <h2 className="mt-4 font-serif text-2xl font-bold text-luxury-text">Open my NotebookLM</h2>
         <p className="mx-auto mt-3 max-w-2xl text-luxury-muted">
-          Open the notebook directly, then type any food or ingredient into the chat and it will find the recipe for you instantly.
+          Google does not reliably allow NotebookLM notebooks to be embedded inside another site, so this opens the recipe notebook safely in a new tab.
         </p>
         <a className="primary-button mt-6 text-base" href={notebookUrl} rel="noreferrer" target="_blank">
-          Open My Recipe Book 📖
+          Open my NotebookLM
           <ExternalLinkIcon className="h-4 w-4" />
         </a>
         <p className="mt-5 text-sm font-semibold text-luxury-muted">

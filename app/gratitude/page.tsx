@@ -1,8 +1,10 @@
-'use client';
+﻿'use client';
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { CalendarIcon, HeartIcon, PlusIcon, TrashIcon } from '@/components/Icons';
+import { deleteCloudItem, fetchCloudCollection, seedCloudCollection, upsertCloudItem } from '@/lib/cloudStorage';
 import {
+  CLOUD_COLLECTIONS,
   GratitudeEntry,
   STORAGE_KEYS,
   addToCollection,
@@ -10,6 +12,7 @@ import {
   deleteFromCollection,
   formatDisplayDate,
   getCollection,
+  setCollection,
   sortNewestByDate,
   todayInputValue
 } from '@/lib/storage';
@@ -36,8 +39,23 @@ export default function GratitudePage() {
   }, []);
 
   useEffect(() => {
-    setEntries(sortNewestByDate(getCollection<GratitudeEntry>(STORAGE_KEYS.gratitude)));
+    const localEntries = sortNewestByDate(getCollection<GratitudeEntry>(STORAGE_KEYS.gratitude));
+    setEntries(localEntries);
     setForm((current) => ({ ...current, date: todayInputValue() }));
+
+    fetchCloudCollection<GratitudeEntry>(CLOUD_COLLECTIONS.gratitude)
+      .then((cloudEntries) => {
+        if (cloudEntries.length > 0) {
+          const sorted = sortNewestByDate(cloudEntries);
+          setCollection(STORAGE_KEYS.gratitude, sorted);
+          setEntries(sorted);
+        } else if (localEntries.length > 0) {
+          void seedCloudCollection(CLOUD_COLLECTIONS.gratitude, localEntries);
+        }
+      })
+      .catch(() => {
+        // Local storage remains the offline fallback.
+      });
   }, []);
 
   function submitEntry(event: FormEvent<HTMLFormElement>) {
@@ -62,12 +80,14 @@ export default function GratitudePage() {
 
     const nextEntries = addToCollection<GratitudeEntry>(STORAGE_KEYS.gratitude, entry);
     setEntries(sortNewestByDate(nextEntries));
+    void upsertCloudItem(CLOUD_COLLECTIONS.gratitude, entry);
     setForm({ ...initialForm, date: todayInputValue() });
     setError('');
   }
 
   function deleteEntry(id: string) {
     setEntries(sortNewestByDate(deleteFromCollection<GratitudeEntry>(STORAGE_KEYS.gratitude, id)));
+    void deleteCloudItem(CLOUD_COLLECTIONS.gratitude, id);
   }
 
   return (
@@ -164,7 +184,7 @@ export default function GratitudePage() {
 
           <div className="grid gap-4">
             {entries.length === 0 ? (
-              <div className="rounded-lg border border-dashed border-luxury-line bg-black/20 p-8 text-center">
+              <div className="rounded-lg border border-dashed border-luxury-line bg-white/50 p-8 text-center">
                 <HeartIcon className="mx-auto h-10 w-10 text-luxury-gold" />
                 <h3 className="mt-4 font-serif text-xl font-bold text-luxury-text">No gratitude saved yet</h3>
                 <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-luxury-muted">
@@ -173,7 +193,7 @@ export default function GratitudePage() {
               </div>
             ) : (
               entries.map((entry) => (
-                <article className="section-card section-card-hover bg-black/20" key={entry.id}>
+                <article className="section-card section-card-hover bg-white/50" key={entry.id}>
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <span className="gold-badge">{formatDisplayDate(entry.date)}</span>
@@ -197,3 +217,4 @@ export default function GratitudePage() {
     </div>
   );
 }
+

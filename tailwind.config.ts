@@ -10,13 +10,13 @@ const config: Config = {
     extend: {
       colors: {
         luxury: {
-          black: '#0a0a0a',
-          card: '#111111',
-          gold: '#c9a84c',
-          'gold-light': '#e8c96d',
-          text: '#f5f5f5',
-          muted: '#888888',
-          line: 'rgba(201, 168, 76, 0.2)'
+          black: '#fbf7f2',
+          card: '#ffffff',
+          gold: '#b76e79',
+          'gold-light': '#7a9b76',
+          text: '#2f2926',
+          muted: '#756a64',
+          line: 'rgba(183, 110, 121, 0.18)'
         }
       },
       fontFamily: {
@@ -24,9 +24,9 @@ const config: Config = {
         serif: ['var(--font-playfair)', '"Playfair Display"', 'serif']
       },
       boxShadow: {
-        gold: '0 0 20px rgba(201, 168, 76, 0.15)',
-        'gold-strong': '0 0 28px rgba(201, 168, 76, 0.25)',
-        card: '0 18px 45px rgba(0, 0, 0, 0.35)'
+        gold: '0 14px 32px rgba(183, 110, 121, 0.14)',
+        'gold-strong': '0 18px 42px rgba(183, 110, 121, 0.2)',
+        card: '0 18px 45px rgba(87, 66, 54, 0.12)'
       },
       keyframes: {
         'page-in': {

@@ -1,111 +1,21 @@
-'use client';
+﻿'use client';
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { BookIcon, CheckIcon, EditIcon, PlusIcon } from '@/components/Icons';
+import { pronouns as studyPronouns, verbs as expandedVerbs, words as expandedWords } from '@/lib/frenchData';
+import { fetchCloudCollection, seedCloudCollection, upsertCloudItem } from '@/lib/cloudStorage';
 import {
+  CLOUD_COLLECTIONS,
   FrenchPracticeEntry,
   STORAGE_KEYS,
   addToCollection,
   createId,
   formatDisplayDate,
   getCollection,
+  setCollection,
   todayInputValue
 } from '@/lib/storage';
 
-const words = [
-  {
-    french: 'maison',
-    english: 'house',
-    pronunciation: 'meh-zon',
-    sentence: "J'habite dans une maison.",
-    sentenceMeaning: 'I live in a house.'
-  },
-  {
-    french: 'livre',
-    english: 'book',
-    pronunciation: 'leev-ruh',
-    sentence: 'Je lis un livre.',
-    sentenceMeaning: 'I am reading a book.'
-  },
-  {
-    french: 'école',
-    english: 'school',
-    pronunciation: 'ay-kol',
-    sentence: "L'école est près de la maison.",
-    sentenceMeaning: 'The school is near the house.'
-  },
-  {
-    french: 'autobus',
-    english: 'bus',
-    pronunciation: 'oh-toh-boos',
-    sentence: "Je prends l'autobus.",
-    sentenceMeaning: 'I take the bus.'
-  },
-  {
-    french: 'fenêtre',
-    english: 'window',
-    pronunciation: 'fuh-net-ruh',
-    sentence: 'La fenêtre est ouverte.',
-    sentenceMeaning: 'The window is open.'
-  },
-  {
-    french: 'chaise',
-    english: 'chair',
-    pronunciation: 'shehz',
-    sentence: 'La chaise est confortable.',
-    sentenceMeaning: 'The chair is comfortable.'
-  },
-  {
-    french: 'porte',
-    english: 'door',
-    pronunciation: 'port',
-    sentence: 'La porte est fermée.',
-    sentenceMeaning: 'The door is closed.'
-  },
-  {
-    french: 'avion',
-    english: 'airplane',
-    pronunciation: 'ah-vyohn',
-    sentence: "L'avion arrive demain.",
-    sentenceMeaning: 'The airplane arrives tomorrow.'
-  }
-];
-
-const verbs = [
-  {
-    infinitive: 'manger',
-    meaning: 'to eat',
-    pronunciation: 'mahn-zhay',
-    present: ['je mange', 'tu manges', 'il/elle mange', 'nous mangeons', 'vous mangez', 'ils/elles mangent'],
-    passe: ["j'ai mangé", 'tu as mangé', 'il/elle a mangé', 'nous avons mangé', 'vous avez mangé', 'ils/elles ont mangé'],
-    future: ['je mangerai', 'tu mangeras', 'il/elle mangera', 'nous mangerons', 'vous mangerez', 'ils/elles mangeront']
-  },
-  {
-    infinitive: 'marcher',
-    meaning: 'to walk',
-    pronunciation: 'mar-shay',
-    present: ['je marche', 'tu marches', 'il/elle marche', 'nous marchons', 'vous marchez', 'ils/elles marchent'],
-    passe: ["j'ai marché", 'tu as marché', 'il/elle a marché', 'nous avons marché', 'vous avez marché', 'ils/elles ont marché'],
-    future: ['je marcherai', 'tu marcheras', 'il/elle marchera', 'nous marcherons', 'vous marcherez', 'ils/elles marcheront']
-  },
-  {
-    infinitive: 'parler',
-    meaning: 'to speak',
-    pronunciation: 'par-lay',
-    present: ['je parle', 'tu parles', 'il/elle parle', 'nous parlons', 'vous parlez', 'ils/elles parlent'],
-    passe: ["j'ai parlé", 'tu as parlé', 'il/elle a parlé', 'nous avons parlé', 'vous avez parlé', 'ils/elles ont parlé'],
-    future: ['je parlerai', 'tu parleras', 'il/elle parlera', 'nous parlerons', 'vous parlerez', 'ils/elles parleront']
-  }
-];
-
-const pronouns = [
-  ['je', 'I'],
-  ['tu', 'you, informal'],
-  ['il / elle', 'he / she'],
-  ['nous', 'we'],
-  ['vous', 'you, formal or plural'],
-  ['ils / elles', 'they']
-];
 
 function dayIndex(length: number) {
   const today = new Date();
@@ -115,8 +25,8 @@ function dayIndex(length: number) {
 }
 
 export default function FrenchStudyPage() {
-  const [wordIndex, setWordIndex] = useState(() => dayIndex(words.length));
-  const [verbIndex, setVerbIndex] = useState(() => dayIndex(verbs.length));
+  const [wordIndex, setWordIndex] = useState(() => dayIndex(expandedWords.length));
+  const [verbIndex, setVerbIndex] = useState(() => dayIndex(expandedVerbs.length));
   const [wordHintOpen, setWordHintOpen] = useState(false);
   const [challengeHintOpen, setChallengeHintOpen] = useState(false);
   const [answer, setAnswer] = useState('');
@@ -124,22 +34,36 @@ export default function FrenchStudyPage() {
   const [entries, setEntries] = useState<FrenchPracticeEntry[]>([]);
   const today = todayInputValue();
 
-  const word = words[wordIndex];
-  const verb = verbs[verbIndex];
+  const word = expandedWords[wordIndex];
+  const verb = expandedVerbs[verbIndex];
   const recentEntries = useMemo(() => entries.slice(0, 3), [entries]);
 
   useEffect(() => {
-    setEntries(getCollection<FrenchPracticeEntry>(STORAGE_KEYS.frenchPractice));
+    const localEntries = getCollection<FrenchPracticeEntry>(STORAGE_KEYS.frenchPractice);
+    setEntries(localEntries);
+
+    fetchCloudCollection<FrenchPracticeEntry>(CLOUD_COLLECTIONS.frenchPractice)
+      .then((cloudEntries) => {
+        if (cloudEntries.length > 0) {
+          setCollection(STORAGE_KEYS.frenchPractice, cloudEntries);
+          setEntries(cloudEntries);
+        } else if (localEntries.length > 0) {
+          void seedCloudCollection(CLOUD_COLLECTIONS.frenchPractice, localEntries);
+        }
+      })
+      .catch(() => {
+        // Local storage remains the offline fallback.
+      });
   }, []);
 
   function tryAnotherWord() {
-    setWordIndex((current) => (current + 1) % words.length);
+    setWordIndex((current) => (current + 1) % expandedWords.length);
     setWordHintOpen(false);
     setSavedMessage('');
   }
 
   function practiceAgain() {
-    setVerbIndex((current) => (current + 1) % verbs.length);
+    setVerbIndex((current) => (current + 1) % expandedVerbs.length);
     setChallengeHintOpen(false);
     setAnswer('');
     setSavedMessage('');
@@ -163,6 +87,7 @@ export default function FrenchStudyPage() {
     };
 
     setEntries(addToCollection<FrenchPracticeEntry>(STORAGE_KEYS.frenchPractice, entry));
+    void upsertCloudItem(CLOUD_COLLECTIONS.frenchPractice, entry);
     setAnswer('');
     setSavedMessage('Saved. A little practice counts.');
   }
@@ -205,7 +130,7 @@ export default function FrenchStudyPage() {
               <BookIcon className="h-8 w-8 shrink-0 text-luxury-gold-light" />
             </div>
 
-            <div className="rounded-lg border border-luxury-line bg-black/25 p-4">
+            <div className="rounded-lg border border-luxury-line bg-white/55 p-4">
               <p className="soft-label">Daily challenge</p>
               <p className="mt-2 leading-7 text-luxury-text">Use this word in your own sentence.</p>
             </div>
@@ -239,16 +164,16 @@ export default function FrenchStudyPage() {
             </p>
 
             <div className="mt-5 grid gap-2 sm:grid-cols-2">
-              {pronouns.map(([pronoun, meaning]) => (
-                <div className="rounded-lg border border-luxury-line bg-black/25 p-3" key={pronoun}>
+              {studyPronouns.map(([pronoun, meaning]) => (
+                <div className="rounded-lg border border-luxury-line bg-white/55 p-3" key={pronoun}>
                   <p className="font-bold text-luxury-gold-light">{pronoun}</p>
                   <p className="mt-1 text-sm text-luxury-muted">{meaning}</p>
                 </div>
               ))}
             </div>
 
-            <div className="mt-5 rounded-lg border border-luxury-line bg-black/25 p-4 text-sm leading-6 text-luxury-muted">
-              Present is for now. Passé composé is for something already done. Future simple is for something that will
+            <div className="mt-5 rounded-lg border border-luxury-line bg-white/55 p-4 text-sm leading-6 text-luxury-muted">
+              Present is for now. PassÃ© composÃ© is for something already done. Future simple is for something that will
               happen later.
             </div>
           </article>
@@ -272,7 +197,7 @@ export default function FrenchStudyPage() {
             <div className="overflow-hidden rounded-lg border border-luxury-line">
               {[
                 ['Present', verb.present],
-                ['Passé composé', verb.passe],
+                ['PassÃ© composÃ©', verb.passe],
                 ['Future simple', verb.future]
               ].map(([tense, forms]) => (
                 <div className="border-b border-luxury-line last:border-b-0" key={tense as string}>
@@ -301,7 +226,7 @@ export default function FrenchStudyPage() {
             </div>
 
             <form className="grid gap-4" onSubmit={savePractice}>
-              <div className="rounded-lg border border-luxury-line bg-black/25 p-4">
+              <div className="rounded-lg border border-luxury-line bg-white/55 p-4">
                 <p className="text-sm leading-6 text-luxury-muted">
                   Try using <span className="font-bold text-luxury-gold-light">{word.french}</span> or{' '}
                   <span className="font-bold text-luxury-gold-light">{verb.infinitive}</span> in a short French sentence.
@@ -327,7 +252,7 @@ export default function FrenchStudyPage() {
               </label>
 
               {savedMessage ? (
-                <p className="rounded-lg border border-luxury-line bg-black/25 px-4 py-3 text-sm font-semibold text-luxury-muted">
+                <p className="rounded-lg border border-luxury-line bg-white/55 px-4 py-3 text-sm font-semibold text-luxury-muted">
                   {savedMessage}
                 </p>
               ) : null}
@@ -352,14 +277,14 @@ export default function FrenchStudyPage() {
 
             <div className="grid gap-3">
               {recentEntries.length === 0 ? (
-                <p className="rounded-lg border border-dashed border-luxury-line bg-black/20 p-5 text-sm leading-6 text-luxury-muted">
+                <p className="rounded-lg border border-dashed border-luxury-line bg-white/50 p-5 text-sm leading-6 text-luxury-muted">
                   Saved French practice will appear here. One sentence a day is enough to build confidence.
                 </p>
               ) : (
                 recentEntries.map((entry) => (
-                  <article className="rounded-lg border border-luxury-line bg-black/25 p-4" key={entry.id}>
+                  <article className="rounded-lg border border-luxury-line bg-white/55 p-4" key={entry.id}>
                     <p className="text-xs font-bold uppercase tracking-[0.14em] text-luxury-gold-light">
-                      {formatDisplayDate(entry.date)} · {entry.word} · {entry.verb}
+                      {formatDisplayDate(entry.date)} Â· {entry.word} Â· {entry.verb}
                     </p>
                     <p className="mt-3 whitespace-pre-line leading-7 text-luxury-text">{entry.answer}</p>
                   </article>
@@ -372,3 +297,5 @@ export default function FrenchStudyPage() {
     </div>
   );
 }
+
+

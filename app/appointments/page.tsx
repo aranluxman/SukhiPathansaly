@@ -1,10 +1,12 @@
-'use client';
+﻿'use client';
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { CalendarCheckIcon, CalendarIcon, PlusIcon, TrashIcon } from '@/components/Icons';
+import { deleteCloudItem, fetchCloudCollection, seedCloudCollection, upsertCloudItem } from '@/lib/cloudStorage';
 import {
   Appointment,
   AppointmentType,
+  CLOUD_COLLECTIONS,
   STORAGE_KEYS,
   addToCollection,
   createId,
@@ -240,6 +242,20 @@ export default function AppointmentsPage() {
 
     setAppointments(sortOldestByDateTime(appointmentsToShow));
     setForm((current) => ({ ...current, date: todayInputValue() }));
+
+    fetchCloudCollection<Appointment>(CLOUD_COLLECTIONS.appointments)
+      .then((cloudAppointments) => {
+        if (cloudAppointments.length > 0) {
+          const sorted = sortOldestByDateTime(cloudAppointments);
+          setCollection(STORAGE_KEYS.appointments, sorted);
+          setAppointments(sorted);
+        } else if (appointmentsToShow.length > 0) {
+          void seedCloudCollection(CLOUD_COLLECTIONS.appointments, appointmentsToShow);
+        }
+      })
+      .catch(() => {
+        // Local storage remains the offline fallback.
+      });
   }, []);
 
   const calendarDays = useMemo(() => makeCalendarDays(visibleMonth), [visibleMonth]);
@@ -272,6 +288,7 @@ export default function AppointmentsPage() {
 
     const nextAppointments = sortOldestByDateTime(addToCollection<Appointment>(STORAGE_KEYS.appointments, appointment));
     setAppointments(nextAppointments);
+    void upsertCloudItem(CLOUD_COLLECTIONS.appointments, appointment);
     setSelectedDate(appointment.date);
     setVisibleMonth(new Date(`${appointment.date}T00:00:00`));
     setForm({ ...initialForm, date: appointment.date });
@@ -279,6 +296,7 @@ export default function AppointmentsPage() {
 
   function deleteAppointment(id: string) {
     setAppointments(sortOldestByDateTime(deleteFromCollection<Appointment>(STORAGE_KEYS.appointments, id)));
+    void deleteCloudItem(CLOUD_COLLECTIONS.appointments, id);
   }
 
   function shiftMonth(offset: number) {
@@ -296,7 +314,7 @@ export default function AppointmentsPage() {
         <p className="soft-label text-luxury-gold-light">Appointments</p>
         <h1 className="mt-2 font-serif text-4xl font-bold text-luxury-text">A clear calendar for what&apos;s next</h1>
         <p className="mt-3 max-w-2xl text-luxury-muted">
-          Keep doctor, dentist, gym bookings, and other appointments in one polished local calendar.
+          Keep doctor, dentist, gym bookings, and family plans in one simple calendar.
         </p>
       </section>
 
@@ -346,7 +364,7 @@ export default function AppointmentsPage() {
                   className={`min-h-20 rounded-lg border p-2 text-left ${
                     selected
                       ? 'border-luxury-gold bg-luxury-gold/15 shadow-gold'
-                      : 'border-luxury-line bg-black/20 hover:border-luxury-gold hover:bg-luxury-card'
+                      : 'border-luxury-line bg-white/50 hover:border-luxury-gold hover:bg-luxury-card'
                   } ${day.inMonth ? 'text-luxury-text' : 'text-luxury-muted/45'}`}
                   key={day.value}
                   onClick={() => selectDay(day.value)}
@@ -354,7 +372,7 @@ export default function AppointmentsPage() {
                 >
                   <span
                     className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold ${
-                      today ? 'bg-luxury-gold text-black' : ''
+                      today ? 'bg-luxury-gold text-white' : ''
                     }`}
                   >
                     {day.day}
@@ -378,14 +396,14 @@ export default function AppointmentsPage() {
                 </p>
               ) : (
                 selectedEvents.map((appointment) => (
-                  <article className="rounded-lg border border-luxury-line bg-black/25 p-4" key={appointment.id}>
+                  <article className="rounded-lg border border-luxury-line bg-white/55 p-4" key={appointment.id}>
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <span className="gold-badge">{appointment.type}</span>
                         <h4 className="mt-3 font-serif text-xl font-bold text-luxury-text">{appointment.title}</h4>
                         <p className="mt-1 text-sm font-semibold text-luxury-muted">
                           {appointment.time}
-                          {appointment.location ? ` · ${appointment.location}` : ''}
+                          {appointment.location ? ` Â· ${appointment.location}` : ''}
                         </p>
                       </div>
                       <button
@@ -504,13 +522,13 @@ export default function AppointmentsPage() {
                 <p className="text-sm text-luxury-muted">No upcoming appointments yet.</p>
               ) : (
                 upcomingEvents.map((appointment) => (
-                  <article className="rounded-lg border border-luxury-line bg-black/25 p-4" key={appointment.id}>
+                  <article className="rounded-lg border border-luxury-line bg-white/55 p-4" key={appointment.id}>
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <span className="gold-badge">{appointment.type}</span>
                         <h3 className="mt-3 font-serif text-lg font-bold text-luxury-text">{appointment.title}</h3>
                         <p className="mt-1 text-sm font-semibold text-luxury-muted">
-                          {formatDisplayDate(appointment.date)} · {appointment.time}
+                          {formatDisplayDate(appointment.date)} Â· {appointment.time}
                         </p>
                       </div>
                       <button
@@ -532,3 +550,4 @@ export default function AppointmentsPage() {
     </div>
   );
 }
+

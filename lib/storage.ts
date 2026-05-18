@@ -13,6 +13,13 @@ export const STORAGE_KEYS = {
   welcomeSeen: 'sukhi_welcome_seen'
 } as const;
 
+export const CLOUD_COLLECTIONS = {
+  recipes: 'recipes',
+  gratitude: 'gratitude',
+  appointments: 'appointments',
+  frenchPractice: 'french_practice'
+} as const;
+
 export type WorkoutCategory = 'Cardio' | 'Strength' | 'Yoga' | 'Bodyweight' | 'Other';
 
 export type Workout = {
